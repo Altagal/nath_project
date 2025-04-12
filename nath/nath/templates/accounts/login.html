@@ -1,0 +1,49 @@
+{% extends "nath/layout/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Login{% endblock %}
+{% block stylesheet %}{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-xl">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-head-row">
+                    <div class="card-title">Login</div>
+                    <div class="card-tools">
+                        <div class="card-tools">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        {% crispy form %}
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-3">
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-lg btn-block">
+                                    <i class="fas fa-user"></i>
+                                    <div>Entrar</div>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-xl-3">
+                            <div class="form-group">
+                                <a href="{% url 'account_register' %}" class="btn btn-primary btn-lg btn-block"
+                                   id="delete_teste1">
+                                    <i class="fas fa-user-plus"></i>
+                                    <div>Registrar-se</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+{% endblock %}

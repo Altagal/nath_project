@@ -1,0 +1,32 @@
+{% load static %}
+<nav class="navbar navbar-header navbar-expand-lg" data-background-color="green2">
+    <div class="container-fluid">
+        <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown hidden-caret">
+                <a class="nav-link dropdown-toggle"  id="messageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{request.user.get_full_name}} <i class="fas fa-user-alt ml-2"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user animated fadeIn">
+                    <div class="dropdown-user-scroll scrollbar-outer">
+                        <li>
+                            <div class="user-box">
+                                <div class="u-text">
+                                    <h4>{{request.user.get_full_name}}</h4>
+                                    <p class="text-muted">{{request.user.email}}</p>
+                                    <p class="text-muted">{{request.user.perm_lvl_name}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'account_logout'%}">  <i class="fas fa-door-open text-muted"></i>Sair</a>
+                        </li>
+                    </div>
+                </ul>
+            </li>
+            {% endif %}
+            
+        </ul>
+    </div>
+</nav>
