@@ -8,6 +8,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
 
     path('', include('home.urls')),
+    path('', include('gestao.urls')),
 
 ]
 
