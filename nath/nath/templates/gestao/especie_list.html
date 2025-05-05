@@ -19,7 +19,7 @@
           <div class="card-head-row">
             <div class="card-title">{{ card_title }}</div>
             <div class="card-tools">
-              <a href="{% url 'laboratorio_create' %}" class="btn btn-lg btn-primary">
+              <a href="{% url 'especie_create' %}" class="btn btn-lg btn-primary">
                 <i class="fas fa-edit"></i>
                 <div>Cadastrar</div>
               </a>
@@ -35,12 +35,12 @@
               </tr>
             </thead>
             <tbody>
-              {% for laboratorio in laboratorio_list %}
+              {% for especie in especie_list %}
                 <tr>
-                  <td>{{ laboratorio.nome }}</td>
+                  <td>{{ especie.nome }}</td>
                   <td>
                     {% comment %}
-                    <a href="{% url 'laboratorio_update' laboratorio.id %}" class="btn btn-icon btn-primary" style="padding-top: .65rem"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'especie_update' especie.id %}" class="btn btn-icon btn-primary" style="padding-top: .65rem"><i class="fas fa-eye"></i></a>
                     {% endcomment %}
                   </td>
                 </tr>

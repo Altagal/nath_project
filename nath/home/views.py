@@ -5,11 +5,11 @@ from home.util import render_html_to_pdf
 
 
 @login_required
-def index(request):
+def home(request):
     context = {
 
     }
-    return render(request, 'home/index.html', context)
+    return render(request, 'home/home.html', context)
 
 
 @login_required

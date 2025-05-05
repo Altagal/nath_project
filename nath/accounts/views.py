@@ -77,12 +77,6 @@ def account_logout(request):
     return redirect('account_login')
 
 
-@login_required
-def home(request):
-    context = {
-
-    }
-    return render(request, 'accounts/home.html', context)
 
 
 @login_required

@@ -5,7 +5,7 @@
 {% endblock %}
 {% block breadcrumbs %}
 <div class="page-header">
-    <a href="{% url 'group_list' %}" class="btn btn-lg btn-primary">
+    <a href="{% url 'material_biologico_proprio_list' %}" class="btn btn-lg btn-primary">
         <i class="fas fa-arrow-left mr-1"></i> Voltar
     </a>
 </div>
@@ -19,7 +19,7 @@
                     <div class="card-title p-2">{{card_title}}</div>
                     <div class="card-tools">
                         {% if is_view %}
-                        <a href="{% url 'group_update' form.initial.id %}" class="btn btn-primary">
+                        <a href="{% url 'material_biologico_update' form.initial.id %}" class="btn btn-primary">
                             Editar
                         </a>
                         {% endif %}
@@ -27,8 +27,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <form action="{% if form.initial.id %}{% url 'group_update' form.initial.id %}{% else %}{% url 'group_create' %}{% endif %}"
-                      method="post">
+                <form method="post">
                     <div class="row">
                         {% crispy form %}
                     </div>
@@ -36,14 +35,17 @@
                         {% if not is_view %}
                         <div class="col-xl-3">
                             <div class="form-group">
-                                <input type="submit" class="btn btn-primary btn-lg btn-block">
+                                <button class="btn btn-primary btn-lg btn-block">
+                                    <i class="fas fa-save"></i>
+                                    <div>Salvar</div>
+                                </button>
                             </div>
                         </div>
                         {% endif %}
                         <div class="col-xl-3">
                             {% if form.initial.id and not is_view %}
                             <div class="form-group">
-                                <button type="button" class="btn btn-danger btn-lg btn-block" id="group_delete_button">
+                                <button type="button" class="btn btn-danger btn-lg btn-block" id="material_biologico_delete_button">
                                     <i class="fas fa-trash-alt"></i>
                                     <div>Excluir</div>
                                 </button>
@@ -60,12 +62,12 @@
 {% block javascript %}
 {% if form.initial.id and not is_view %}
 <script>
-    $('#group_delete_button').click(function(e) {
+    $('#material_biologico_delete_button').click(function(e) {
 	    swal({
 	        text: "Tem certeza que deseja excluir?",
 	        icon: 'info',
 	        buttons:{
-	        confirm: {
+		        confirm: {
 			        text : 'Sim',
 			        className : 'btn btn-success'
 		        },
@@ -77,7 +79,7 @@
 	        }
             }).then((Delete) => {
 	        if (Delete) {
-                window.location.href = "{% url 'group_delete' form.initial.id %}"
+                window.location.href = "{% url 'material_biologico_delete' form.initial.id %}"
 	        } else {
 		        swal.close();
 	        }

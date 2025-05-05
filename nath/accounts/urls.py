@@ -5,7 +5,7 @@ urlpatterns = [
     path('', views.account_login, name='account_login'),
     path('sair', views.account_logout, name='account_logout'),
     path('registrar-se', views.account_register, name='account_register'),
-    path('home', views.home, name='home'),
+    
 
     path('contas', views.account_list, name='account_list'),
     # path('ver-usuario/<str:pk>/', views.account_read, name='account_read'), # nao ultilizado

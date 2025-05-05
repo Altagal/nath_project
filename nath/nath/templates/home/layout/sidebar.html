@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="sidebar sidebar-style-2">
+
+    {% if user.is_authenticated %}
+    <div class="sidebar-wrapper scrollbar scrollbar-inner">
+        <div class="sidebar-content">
+            <ul class="nav nav-primary">
+                {% if user.is_authenticated and user.is_admin or user.is_superuser %}
+                <li class="nav-section"><span class="sidebar-mini-icon"></span><h4 class="text-section">Usuário</h4></li>
+                <li class="nav-item active"><a href="{% url 'account_list'%}"><i class="fas fa-user-cog"></i><p>Gerenciar Usuário</p></a></li>
+                <li class="nav-item active"><a href="{% url 'group_list'%}"><i class="fas fa-user-cog"></i><p>Gerenciar Grupos</p></a></li>
+                {% endif %}
+                <li class="nav-section"><span class="sidebar-mini-icon"></span><h4 class="text-section">Amostras</h4></li>
+                <li class="nav-item active"><a href="{% url 'material_biologico_proprio_list'%}"><i class="fas fa-user-cog"></i><p>Minhas Amostras</p></a></li>
+                <li class="nav-item active"><a href="{% url 'material_biologico_compartilhados_list'%}"><i class="fas fa-user-cog"></i><p>Amostras Compartilhadas</p></a></li>
+                
+                <li class="nav-section"><span class="sidebar-mini-icon"></span><h4 class="text-section">Gestão</h4></li>
+                <li class="nav-item active"><a href="{% url 'laboratorio_list'%}"><i class="fas fa-user-cog"></i><p>Laboratórios</p></a></li>
+                <li class="nav-item active"><a href="{% url 'projeto_list'%}"><i class="fas fa-user-cog"></i><p>Projetos</p></a></li>
+                <li class="nav-item active"><a href="{% url 'especie_list'%}"><i class="fas fa-user-cog"></i><p>Especies</p></a></li>
+                
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+</div>

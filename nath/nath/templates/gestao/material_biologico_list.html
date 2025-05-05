@@ -19,7 +19,7 @@
           <div class="card-head-row">
             <div class="card-title">{{ card_title }}</div>
             <div class="card-tools">
-              <a href="{% url 'laboratorio_create' %}" class="btn btn-lg btn-primary">
+              <a href="{% url 'material_biologico_create' %}" class="btn btn-lg btn-primary">
                 <i class="fas fa-edit"></i>
                 <div>Cadastrar</div>
               </a>
@@ -30,17 +30,23 @@
           <table class="table table-hover dataTable">
             <thead>
               <tr>
-                <th scope="col" style="width: 45%;">Nome</th>
+                <th scope="col" style="width: 10;">Tipo</th>
+                <th scope="col" style="width: 10;">Data Coleta</th>
+                <th scope="col" style="width: 10;">Meio Acondicionamento</th>
+                <th scope="col" style="width: 10;">Compatilhavel</th>
                 <th class="text-center" style="width: 1%;" scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              {% for laboratorio in laboratorio_list %}
+              {% for meus_material in meus_material_list %}
                 <tr>
-                  <td>{{ laboratorio.nome }}</td>
+                  <td>{{ meus_material.get_tipo_material_display }}</td>
+                  <td>{{ meus_material.data_coleta }}</td>
+                  <td>{{ meus_material.get_meio_acondicionamento_display }}</td>
+                  <td>{{ meus_material.is_compartilhavel }}</td>
                   <td>
                     {% comment %}
-                    <a href="{% url 'laboratorio_update' laboratorio.id %}" class="btn btn-icon btn-primary" style="padding-top: .65rem"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'material_biologico_update' meus_material.id %}" class="btn btn-icon btn-primary" style="padding-top: .65rem"><i class="fas fa-eye"></i></a>
                     {% endcomment %}
                   </td>
                 </tr>
