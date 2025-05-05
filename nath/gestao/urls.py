@@ -17,5 +17,7 @@ urlpatterns = [
     path('meus_materiais', views.material_biologico_proprio_list, name='material_biologico_proprio_list'),
     path('materiais_compatilhados', views.material_biologico_compartilhados_list, name='material_biologico_compartilhados_list'),
     path('criar-material-biologico', views.material_biologico_create, name='material_biologico_create'),
+    path('ver-material-biologico/<int:pk>', views.material_biologico_read, name='material_biologico_read'),
+    path('alterar-material-biologico/<int:pk>', views.material_biologico_update, name='material_biologico_update'),
     
 ]

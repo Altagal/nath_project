@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from gestao.models import Laboratorio, Projeto, Especie, MaterialBiologico
 from gestao.forms import LaboratorioForm, ProjetoForm, EspecieForm, MaterialBiologicoForm
 
@@ -135,24 +136,23 @@ def material_biologico_proprio_list(request):
     }
 
     context = {
-        "meus_material_list": MaterialBiologico.objects.filter(
+        "material_biologico_list": MaterialBiologico.objects.filter(
             created_by=request.user
         ).all(),
     }
     return render(
-        request, "gestao/material_biologico_list.html", {**pre_context, **context}
+        request, "gestao/material_biologico_proprio_list.html", {**pre_context, **context}
     )
 
 @login_required
 def material_biologico_compartilhados_list(request):
     pre_context = {
-        "card_title": "Minhas Amostras",
+        "card_title": "Amostras Compatilhadas",
     }
 
     context = {
-        "material_biologico_list": MaterialBiologico.objects.filter(
-            
-        ).all(),
+
+        "material_biologico_list": MaterialBiologico.objects.filter(is_compartilhavel=True).exclude(created_by_id=request.user.id),
     }
     return render(
         request, "gestao/material_biologico_list.html", {**pre_context, **context}
@@ -185,3 +185,43 @@ def material_biologico_create(request):
 
     return render(request, "gestao/material_biologico.html", {**pre_context, **context})
 
+
+@login_required
+def material_biologico_update(request, pk):
+    obj = get_object_or_404(MaterialBiologico, id=pk)
+
+    pre_context = {
+        "card_title": "MaterialBiologico",
+    }
+
+    if request.method == "GET":
+        context = {
+            "form": MaterialBiologicoForm(instance=obj),
+        }
+
+    if request.method == "POST":
+        form = MaterialBiologicoForm(request.POST, request.FILES, instance=obj)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.custom_update(request)
+            return redirect("material_biologico_proprio_list")
+        else:
+            context = {
+                "form": form,
+            }
+
+    return render(request, "gestao/material_biologico.html", {**pre_context, **context})
+
+
+@login_required
+def material_biologico_read(request, pk):
+    pre_context = {
+        "card_title": "material_biologico",
+    }
+
+    obj = get_object_or_404(MaterialBiologico, id=pk)
+    context = {
+        "is_view": True,
+        "form": MaterialBiologicoForm(instance=obj, readonly=True),
+    }
+    return render(request, "gestao/material_biologico.html", {**pre_context, **context})

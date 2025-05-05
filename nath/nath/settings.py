@@ -165,10 +165,9 @@ LOGIN_REDIRECT_URL = 'account_login'
 DEFAULT_PASSWORD = 'Ictb@1234'
 
 # SESSION_EXPIRE_SECONDS = 60 * 30  # 30 MINUTES
-# SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = False
 
 """
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-41f82+d59a(if2r@4&*2=n2^@qnn+77wu3cvonok!*14oi5qg*'
 """
