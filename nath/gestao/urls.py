@@ -14,10 +14,17 @@ urlpatterns = [
     path('especies', views.especie_list, name='especie_list'),
     path('criar-especie', views.especie_create, name='especie_create'),
     
-    path('meus_materiais', views.material_biologico_proprio_list, name='material_biologico_proprio_list'),
-    path('materiais_compatilhados', views.material_biologico_compartilhados_list, name='material_biologico_compartilhados_list'),
-    path('criar-material-biologico', views.material_biologico_create, name='material_biologico_create'),
-    path('ver-material-biologico/<int:pk>', views.material_biologico_read, name='material_biologico_read'),
-    path('alterar-material-biologico/<int:pk>', views.material_biologico_update, name='material_biologico_update'),
+    path('minhas-amostras', views.amostra_list, name='amostra_list'),
+    path('criar-amostra', views.amostra_create, name='amostra_create'),
+    path('ver-amostra/<int:pk>', views.amostra_read, name='amostra_read'),
+    path('alterar-amostra/<int:pk>', views.amostra_update, name='amostra_update'),
+    path('solicitar-amostra/<int:pk>', views.amostra_solicitar, name='amostra_solicitar'),
+    path('alterar-compartilhamento-amostra/<int:pk>', views.amostra_share_toogle, name='amostra_share_toogle'),
     
+    path('amostras-compatilhadas', views.amostra_compartilhada_list, name='amostra_compartilhada_list'),
+    path('ver-amostra-compatilhada/<int:pk>', views.amostra_compartilhada_read, name='amostra_compartilhada_read'),
+    
+    path('minhas-solicitacoes', views.minhas_solicitacoes_list, name='minhas_solicitacoes_list'),
+    path('atender-solicitacao/<int:pk>', views.atender_solicitacao, name='atender_solicitacao'),
+     
 ]

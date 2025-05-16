@@ -1,0 +1,109 @@
+{% extends 'home/layout/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {{ card_title }}
+{% endblock %}
+
+{% block stylesheet %}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="page-header">
+    <a href="{% url 'amostra_list' %}" class="btn btn-lg btn-primary"><i class="fas fa-arrow-left mr-1"></i> Voltar</a>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-xl">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-head-row">
+            <div class="card-title p-2">{{ card_title }}</div>
+            <div class="card-tools">
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            <div class="row">
+              {% crispy form %}
+            </div>
+            <div class="row">
+              {% if not is_view %}
+                <div class="col-xl-3">
+                  <div class="form-group">
+                    <button class="btn btn-primary btn-lg btn-block">
+                      <i class="fas fa-save"></i>
+                      <div>Salvar</div>
+                    </button>
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+          </form>
+        </div>
+        {% if amostra_obj.is_compartilhavel or amostra_obj.solicitacoes.exists %}
+          <div class="card-header">
+            <div class="card-head-row">
+              <div class="card-title p-2">Solicitações de compartilhamento</div>
+              <div class="card-tools"><div>
+                {% if amostra_obj.is_compartilhavel %}
+                  <i class="fas fa-users"></i> Habilitado
+                {% else %}
+                  <i class="fas fa-user-times"></i> Compartilhamento Desabilitado
+                {% endif %}
+              </div></div>
+            </div>
+          </div>
+          <div class="card-body">
+            <table class="table table-hover dataTable">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 33%;">Solicitante</th>
+                  <th scope="col" style="width: 33%;">Data solicitação</th>
+                  <th scope="col" style="width: 33%;"></th>
+                  <th scope="col" class="text-center" style="width: 1%;"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for solicitacao in amostra_obj.solicitacoes.all %}
+                  <tr>
+                    <td>
+                      {{ solicitacao.usuario_solicitante_pk.get_full_name }}<br/>
+                    </td>
+                    <td>{{ solicitacao.created_at|date:"d/m/Y" }}</td>
+                    <td>{% if solicitacao.status != "P" %}{{ solicitacao.get_status_display}}<br> {{ solicitacao.modified_at|date:"d/m/Y"}}{% endif %}</td>
+                    <td>{% if solicitacao.status == "P" or solicitacao.status == "A" %}<a href="{% url 'atender_solicitacao' solicitacao.id %}" class="btn btn-icon btn-primary" style="padding-top: .65rem"><i class="fas fa-people-carry"></i></a>{% endif %}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+        {% if is_view %}
+        <div class="card-header">
+        </div>
+        <div class="card-body">
+          <div class="col-xl-3">
+            <div class="form-group">
+              <a href="{% url 'amostra_share_toogle' form.initial.id %}" class="btn btn-primary btn-lg btn-block">
+                {% if amostra_obj.is_compartilhavel %}
+                  <i class="fas fa-users"></i>
+                  <div>Desabilitar Compartilhamento</div>
+                {% else %}
+                  <i class="fas fa-users"></i>
+                  <div>Habilitar Compartilhamento</div>
+                {% endif %}
+              </a>
+            </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

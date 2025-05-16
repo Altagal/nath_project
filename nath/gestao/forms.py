@@ -6,7 +6,7 @@ from crispy_forms.layout import Div, Field
 
 from home.forms import softdelete_fields, EMPTY_LABEL
 
-from gestao.models import Laboratorio, Projeto, Especie, MaterialBiologico
+from gestao.models import Laboratorio, Projeto, Especie, Amostra
 
 
 class LaboratorioForm(forms.ModelForm):
@@ -51,16 +51,19 @@ class EspecieForm(forms.ModelForm):
         self.helper.all().wrap(Div, css_class="col-6")
 
 
-class MaterialBiologicoForm(forms.ModelForm):
+class AmostraForm(forms.ModelForm):
     projeto_pk = forms.ModelChoiceField(
-        queryset=Projeto.objects.all(), label="Projeto", empty_label=EMPTY_LABEL, required=True
+        queryset=Projeto.objects.all(),
+        label="Projeto",
+        empty_label=EMPTY_LABEL,
+        required=True,
     )
-    
+
     class Meta:
-        model = MaterialBiologico
-        exclude = softdelete_fields + ["created_by"]
+        model = Amostra
+        exclude = softdelete_fields + ["created_by", "is_compartilhavel"]
         widgets = {
-            'data_coleta': forms.TextInput(attrs={'type': 'date'}),
+            "data_coleta": forms.TextInput(attrs={"type": "date"}),
         }
 
     def __init__(self, *args, readonly=False, **kwargs):
@@ -70,3 +73,29 @@ class MaterialBiologicoForm(forms.ModelForm):
         if readonly:
             self.helper.all().wrap(Field, readonly="readonly", disabled="disabled")
         self.helper.all().wrap(Div, css_class="col-6")
+
+
+
+class AmostraCompartilhadaForm(forms.ModelForm):
+    projeto_pk = forms.ModelChoiceField(
+        queryset=Projeto.objects.all(),
+        label="Projeto",
+        empty_label=EMPTY_LABEL,
+        required=True,
+    )
+
+    class Meta:
+        model = Amostra
+        exclude = softdelete_fields + ["created_by", "identificacao_interna_animal","local_amostra",  "is_compartilhavel"]
+        widgets = {
+            "data_coleta": forms.TextInput(attrs={"type": "date"}),
+        }
+
+    def __init__(self, *args, readonly=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_tag = False
+        if readonly:
+            self.helper.all().wrap(Field, readonly="readonly", disabled="disabled")
+        self.helper.all().wrap(Div, css_class="col-6")
+

@@ -28,11 +28,14 @@ class CustomBaseModel(SoftDeleteModel):
             # messages.warning(request, "Error na criação." + str(e))
             pass
 
-    def custom_save(self, request, *args, **kwargs):
+    def custom_save(self, request, msg = None, *args, **kwargs):
         try:
             self.modified_by = request.user
             obj = super().save()
-            messages.success(request, "Cadastrado com sucesso.")
+            if msg: 
+                messages.success(request, msg)
+            else:
+                messages.success(request, "Cadastrado com sucesso.")
             # retorna o objeto que foi salvo
             return obj
 
@@ -42,11 +45,14 @@ class CustomBaseModel(SoftDeleteModel):
         except Exception as e:
             messages.warning(request, "Error na criação." + str(e))
 
-    def custom_update(self, request):
+    def custom_update(self, request, msg=None):
         try:
             self.modified_by = request.user
             super().save()
-            messages.success(request, "Alterado com sucesso.")
+            if msg: 
+                messages.success(request, msg)
+            else:
+                messages.success(request, "Alterado com sucesso.")
 
         except IntegrityError:
             messages.warning(request, "Este registro já existe.")

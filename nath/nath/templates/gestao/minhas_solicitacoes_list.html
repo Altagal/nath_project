@@ -1,0 +1,60 @@
+{% extends 'home/layout/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}
+  {{ card_title }}
+{% endblock %}
+{% block stylesheets %}
+{% endblock %}
+{% block breadcrumbs %}
+  <div class="page-header">
+    <a href="{% url 'home' %}" class="btn btn-lg btn-primary"><i class="fas fa-arrow-left mr-1"></i> Voltar</a>
+  </div>
+{% endblock %}
+{% block content %}
+  <div class="row">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-head-row">
+            <div class="card-title">{{ card_title }}</div>
+            <div class="card-tools">
+             
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-hover dataTable">
+            <thead>
+              <tr>
+                 <th scope="col" style="width: 10;">Tipo</th>
+                <th scope="col" style="width: 10;">Data Coleta</th>
+                <th scope="col" style="width: 10;">Meio Acondicionamento</th>
+                <th scope="col" style="width: 10;">Proprietario</th>
+                <th scope="col" style="width: 10;">Status</th>
+                <th scope="col" class="text-center" style="width: 1%;" ></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for minha_solicitacao in minhas_solicitacoes_list %}
+                <tr>
+                  <td>{{ minha_solicitacao.amostra_pk.get_tipo_amostra_display }}</td>
+                  <td>{{ minha_solicitacao.amostra_pk.data_coleta|date:"d/m/Y" }}</td>
+                  <td>{{ minha_solicitacao.amostra_pk.get_meio_acondicionamento_display }}</td>
+                  <td>{{ minha_solicitacao.amostra_pk.created_by.get_full_name }}<br>{{ amostra.created_by.email }}</td>
+                  <td>{{ minha_solicitacao.get_status_display }}</td>
+                  <td>
+                    <a href="{% url 'amostra_compartilhada_read' minha_solicitacao.amostra_pk.id %}" class="btn btn-icon btn-primary" style="padding-top: .65rem"><i class="fas fa-eye"></i></a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block javascript %}
+  <script src="{% static 'assets/js/primato/primato_script.js' %}"></script>
+{% endblock %}

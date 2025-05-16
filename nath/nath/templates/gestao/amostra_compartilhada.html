@@ -1,0 +1,88 @@
+{% extends "home/layout/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{card_title}}{% endblock %}
+{% block stylesheet %}
+{% endblock %}
+{% block breadcrumbs %}
+<div class="page-header">
+    <a href="{% url 'amostra_compartilhada_list' %}" class="btn btn-lg btn-primary">
+        <i class="fas fa-arrow-left mr-1"></i> Voltar
+    </a>
+</div>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-xl">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-head-row">
+                    <div class="card-title p-2">{{card_title}}</div>
+                    <div class="card-tools">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="row">
+                        {% crispy form %}
+                    </div>
+                    <div class="row">
+                        {% if not is_view %}
+                        <div class="col-xl-3">
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-lg btn-block">
+                                    <i class="fas fa-save"></i>
+                                    <div>Salvar</div>
+                                </button>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if is_view %}
+                        {% if not solicitacao %}
+                        <div class="col-xl-3">
+                            <div class="form-group">
+                                <a href="{% url 'amostra_solicitar' form.initial.id %}" class="btn btn-primary btn-lg btn-block">
+                                    <i class="fas fa-save"></i>
+                                    <div>Solicitar Amostra</div>
+                                </a>
+                            </div>
+                        </div>
+                        {% elif solicitacao.status == "P" %}
+                        <div class="col-xl-6">
+                            <div class="form-group">
+                                Amostra solicitada. Aguarde a resposta do responsavel.
+                            </div>
+                        </div>
+                        {% elif solicitacao.status == "R" %}
+                        <div class="col-xl-3">
+                            <div class="form-group">
+                               Amostra Recusada.
+                            </div>
+                        </div>
+                        {% elif solicitacao.status == "E" %}
+                        <div class="col-xl-3">
+                            <div class="form-group">
+                                Amostra Entregue a você.
+                            </div>
+                        </div>
+                        {% elif solicitacao.status == "C" %}
+                        <div class="col-xl-3">
+                            <div class="form-group">
+                                Solicitação cancelada.
+                            </div>
+                        </div>
+                        {% else %}
+                        Erro inesperado. 
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}

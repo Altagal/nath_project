@@ -19,10 +19,6 @@
           <div class="card-head-row">
             <div class="card-title">{{ card_title }}</div>
             <div class="card-tools">
-              <a href="{% url 'material_biologico_create' %}" class="btn btn-lg btn-primary">
-                <i class="fas fa-edit"></i>
-                <div>Cadastrar</div>
-              </a>
             </div>
           </div>
         </div>
@@ -33,19 +29,19 @@
                 <th scope="col" style="width: 10;">Tipo</th>
                 <th scope="col" style="width: 10;">Data Coleta</th>
                 <th scope="col" style="width: 10;">Meio Acondicionamento</th>
-                <th scope="col" style="width: 10;">Dono</th>
+                <th scope="col" style="width: 10;">Proprietario</th>
                 <th class="text-center" style="width: 1%;" scope="col"></th>
               </tr>
             </thead>
             <tbody>
-              {% for material_biologico in material_biologico_list %}
+              {% for amostra in amostra_list %}
                 <tr>
-                  <td>{{ material_biologico.get_tipo_material_display }}</td>
-                  <td>{{ material_biologico.data_coleta }}</td>
-                  <td>{{ material_biologico.get_meio_acondicionamento_display }}</td>
-                  <td>{{ material_biologico.created_by.get_full_name }}<br>{{ material_biologico.created_by.email }}</td>
+                  <td>{{ amostra.get_tipo_amostra_display }}</td>
+                  <td>{{ amostra.data_coleta }}</td>
+                  <td>{{ amostra.get_meio_acondicionamento_display }}</td>
+                  <td>{{ amostra.created_by.get_full_name }}<br>{{ amostra.created_by.email }}</td>
                   <td>
-                    <a href="{% url 'material_biologico_read' material_biologico.id %}" class="btn btn-icon btn-primary" style="padding-top: .65rem"><i class="fas fa-eye"></i></a>
+                    <a href="{% url 'amostra_compartilhada_read' amostra.id %}" class="btn btn-icon btn-primary" style="padding-top: .65rem"><i class="fas fa-eye"></i></a>
                   </td>
                 </tr>
               {% endfor %}
