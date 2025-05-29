@@ -38,7 +38,7 @@ class CustomUserLoginForm(AuthenticationForm):
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Div(
-                AppendedText('username', '@fiocruz.br'),
+                Field('username'),
                 Field('password'),
                 css_class='col-xl-6')
         )
