@@ -67,8 +67,28 @@ class Account(AbstractUser, BaseUserManager):
     class Meta:
         # todas as permissoes do sistema serão alocadas aqui
         permissions = [
-            ('can_manage_user', 'Pode gerenciar Usuarios e Grupos'),
-            ('can_test_things', 'Pode testar essa coisa aqui'),
+        
+            ('active_user', 'Ativar Usuário'),
+            ('user_to_group', 'Atribuir Usuário a Grupo'),
+            ('add_group', 'Cadastrar Grupo'),
+            ('view_group', 'Ver Grupo'),
+            ('change_group', 'Editar Grupo'),
+            ('delete_group', 'Excluir Grupo'),
+  
+            ('add_projeto', 'Cadastrar Projeto'),
+            ('view_projeto', 'Ver Projeto'),
+            ('change_projeto', 'Editar Projeto'),
+            ('delete_projeto', 'Excluir Projeto'),
+
+            ('add_laboratorio', 'Cadastrar Laboratorio'),
+            ('view_laboratorio', 'Ver Laboratorio'),
+            ('change_laboratorio', 'Editar Laboratorio'),
+            ('delete_laboratorio', 'Excluir Laboratorio'),
+
+            ('add_especie', 'Cadastrar Especie'),
+            ('view_especie',  'Ver Especie'),
+            ('change_especie', 'Editar Especie'),
+            ('delete_especie', 'Excluir Especie'),
         ]
 
     def __str__(self):
