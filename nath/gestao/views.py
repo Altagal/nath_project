@@ -253,7 +253,7 @@ def amostra_share_toogle(request, pk):
 @login_required
 def amostra_compartilhada_list(request):
     pre_context = {
-        "card_title": "Amostras Compatilhadas",
+        "card_title": "Amostras Compartilhadas",
     }
 
     context = {
