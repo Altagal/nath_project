@@ -1,9 +1,7 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-
 from django.contrib import messages
-
+from dotenv import load_dotenv
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -165,3 +163,30 @@ DEFAULT_PASSWORD = 'Ictb@1234'
 
 # SESSION_EXPIRE_SECONDS = 60 * 30  # 30 MINUTES
 SESSION_EXPIRE_AFTER_LAST_ACTIVITY = os.getenv('SESSION_EXPIRE'),
+
+
+
+# CONEXÃO COM ONEDRIVE APARTIR DE UMA CONTA CONSUMER
+
+# error: The grant was obtained for a different tenant.
+# I found the solution, for my case i had to use this url : https://login.microsoftonline.com/common/
+# For organizations only the url must be : https://login.microsoftonline.com/organizations
+# And only for the same tenant of the organization : https://login.microsoftonline.com/{tenantId}
+
+# nao funciona com o @fiocruz.br, limitado pelo administrador
+# funcionando melhor com o gustavojordao@outlook.com
+
+
+#CREDENCIAIS ONENOTE
+MICROSOFT_ONLINE_URL = "https://login.microsoftonline.com/"
+AUTHORITY_URL = MICROSOFT_ONLINE_URL + "consumers/"
+
+BASE_URL = "https://graph.microsoft.com/v1.0/"
+GRAPH_API_ENDPOINT = BASE_URL + "me/"
+
+SCOPES = [
+    "User.Read",
+    "User.Export.all",
+    "Files.ReadWrite",
+]
+

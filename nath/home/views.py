@@ -1,3 +1,4 @@
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
@@ -6,18 +7,14 @@ from home.util import render_html_to_pdf
 
 @login_required
 def home(request):
-    context = {
-
-    }
-    return render(request, 'home/home.html', context)
+    context = {}
+    return render(request, "home/home.html", context)
 
 
 @login_required
 def page_404(request, exception):
-    context = {
-
-    }
-    return render(request, 'home/404.html', context)
+    context = {}
+    return render(request, "home/404.html", context)
 
 
 # FORMULARIO
@@ -28,3 +25,4 @@ def to_pdf(request, template_name):
     }
     return render_html_to_pdf(template_name, context, is_downloadable=False)
     # return render(request, 'pdf\\' + template_name + '.html', context)
+

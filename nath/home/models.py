@@ -1,9 +1,17 @@
+import os
 from django.contrib import messages
 from django.db import models, IntegrityError
 from django.db.models import ProtectedError
 from django_softdelete.models import SoftDeleteModel
 from nath.settings import AUTH_USER_MODEL
 
+
+from office365.sharepoint.client_context import ClientContext
+from office365.runtime.auth.user_credential import UserCredential
+from office365.sharepoint.files.file import File
+
+from dotenv import load_dotenv
+load_dotenv()
 
 class CustomBaseModel(SoftDeleteModel):
     created_at = models.DateTimeField(blank=True, auto_now_add=True)
