@@ -1,3 +1,7 @@
+#Custom .gitignore for Nath Project
+/nath/nath/midia/
+/nath/nath/artifacts/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
