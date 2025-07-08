@@ -1,4 +1,4 @@
-import os, requests, msal, webbrowser, json
+import os, requests, webbrowser, json
 import nath.settings as settings
 from datetime import datetime
 import xlsxwriter
