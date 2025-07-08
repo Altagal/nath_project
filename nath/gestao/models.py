@@ -59,12 +59,15 @@ class Amostra(CustomBaseModel):
         ('ST', 'Sangue Total'),
         ('S', 'Soro'),
         ('LH', 'Laminas Histológicas'),
+        ('P', 'Plasma'),
         ('O', 'Outros')
         ]
     tipo_amostra = models.CharField(max_length=2, choices=tipo_amostra_choices,  verbose_name="Tipo da amostra")
-    data_coleta = models.DateField( verbose_name="Data da coleta da amotra")
+    data_coleta = models.DateField( verbose_name="Data da coleta da amotra", blank=False, null=False)
     meio_acondicionamento_choices = [
     ('R', 'RNA later'),
+    ('RT', 'RNA later + Trizol'),
+    ('T', 'Trizol'),
     ('F',  'Formaldeído'), 
     ('SM', 'Sem-Meio'),
     ('D', 'DMEN')
