@@ -65,6 +65,40 @@ def laboratorio_create(request):
 
     return render(request, "gestao/laboratorio.html", {**pre_context, **context})
 
+@login_required
+def laboratorio_update(request, pk):
+    obj = get_object_or_404(Laboratorio, id=pk)
+
+    pre_context = {
+        "card_title": "Laboratorio",
+    }
+
+    if request.method == 'GET':
+        context = {
+            "form": LaboratorioForm(instance=obj),
+        }
+
+    if request.method == 'POST':
+        form = LaboratorioForm(request.POST, instance=obj)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.custom_update(request)
+            return redirect('laboratorio_list')
+        else:
+            context = {
+                "form": form,
+            }
+
+    return render(request, 'gestao/laboratorio.html', {**pre_context, **context})
+
+
+@login_required
+def laboratorio_delete(request, pk):
+    obj = get_object_or_404(Laboratorio, id=pk)
+    if obj.custom_delete(request):
+        return redirect('laboratorio_list')
+    return redirect('laboratorio_update', pk)
+
 
 # Projeto
 @login_required
@@ -105,6 +139,41 @@ def projeto_create(request):
     return render(request, "gestao/projeto.html", {**pre_context, **context})
 
 
+@login_required
+def projeto_update(request, pk):
+    obj = get_object_or_404(Projeto, id=pk)
+
+    pre_context = {
+        "card_title": "Projeto",
+    }
+
+    if request.method == 'GET':
+        context = {
+            "form": ProjetoForm(instance=obj),
+        }
+
+    if request.method == 'POST':
+        form = ProjetoForm(request.POST, instance=obj)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.custom_update(request)
+            return redirect('projeto_list')
+        else:
+            context = {
+                "form": form,
+            }
+
+    return render(request, 'gestao/projeto.html', {**pre_context, **context})
+
+
+@login_required
+def projeto_delete(request, pk):
+    obj = get_object_or_404(Projeto, id=pk)
+    if obj.custom_delete(request):
+        return redirect('projeto_list')
+    return redirect('projeto_update', pk)
+
+
 # Especie
 @login_required
 def especie_list(request):
@@ -142,6 +211,42 @@ def especie_create(request):
             }
 
     return render(request, "gestao/especie.html", {**pre_context, **context})
+
+
+
+@login_required
+def especie_update(request, pk):
+    obj = get_object_or_404(Especie, id=pk)
+
+    pre_context = {
+        "card_title": "Especie",
+    }
+
+    if request.method == 'GET':
+        context = {
+            "form": EspecieForm(instance=obj),
+        }
+
+    if request.method == 'POST':
+        form = EspecieForm(request.POST, instance=obj)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.custom_update(request)
+            return redirect('especie_list')
+        else:
+            context = {
+                "form": form,
+            }
+
+    return render(request, 'gestao/especie.html', {**pre_context, **context})
+
+
+@login_required
+def especie_delete(request, pk):
+    obj = get_object_or_404(Especie, id=pk)
+    if obj.custom_delete(request):
+        return redirect('especie_list')
+    return redirect('especie_update', pk)
 
 
 # Amostra

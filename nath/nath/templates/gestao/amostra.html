@@ -22,6 +22,9 @@
           <div class="card-head-row">
             <div class="card-title p-2">{{ card_title }}</div>
             <div class="card-tools">
+              {% if is_view %}
+                <a href="{% url 'amostra_update' form.initial.id %}" class="btn btn-primary">Editar</a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -44,6 +47,7 @@
             </div>
           </form>
         </div>
+        {% if is_view %}
         {% if amostra_obj.is_compartilhavel or amostra_obj.solicitacoes.exists %}
           <div class="card-header">
             <div class="card-head-row">
@@ -81,6 +85,7 @@
               </tbody>
             </table>
           </div>
+        {% endif %}
         {% endif %}
         {% if is_view %}
         <div class="card-header">

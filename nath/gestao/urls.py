@@ -3,13 +3,16 @@ from gestao import views
 
 urlpatterns = [
     path('laboratorios', views.laboratorio_list, name='laboratorio_list'),
-    path('linhagens', views.laboratorio_list, name='laboratorio_list'),
     path('criar-laboratorio', views.laboratorio_create, name='laboratorio_create'),
-    # path('editar-laboratorio/<int:pk>', views.laboratorio_update, name='laboratorio_update'),
-    # path('deletar-laboratorio/<int:pk>', views.laboratorio_delete, name='laboratorio_delete'),
+    path('editar-laboratorio/<int:pk>', views.laboratorio_update, name='laboratorio_update'),
+    path('deletar-laboratorio/<int:pk>', views.laboratorio_delete, name='laboratorio_delete'),
 
+    path('linhagens', views.laboratorio_list, name='laboratorio_list'),
+    
     path('projetos', views.projeto_list, name='projeto_list'),
     path('criar-projeto', views.projeto_create, name='projeto_create'),
+    path('editar-projeto/<int:pk>', views.projeto_update, name='projeto_update'),
+    path('deletar-projeto/<int:pk>', views.projeto_delete, name='projeto_delete'),
 
     path('especies', views.especie_list, name='especie_list'),
     path('criar-especie', views.especie_create, name='especie_create'),
