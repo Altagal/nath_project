@@ -29,9 +29,4 @@ urlpatterns = [
     
     path('minhas-solicitacoes', views.minhas_solicitacoes_list, name='minhas_solicitacoes_list'),
     path('atender-solicitacao/<int:pk>', views.atender_solicitacao, name='atender_solicitacao'),
-
-    path('onedrive', views.auth_with_code, name='onedrive'),
-    path('graph_gab_callback', views.graph_gab_callback, name='graph_gab_callback'),
-    path('excel', views.excel, name='excel'),
-     
 ]
