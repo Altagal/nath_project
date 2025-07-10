@@ -1,10 +1,6 @@
-import os, requests, webbrowser, json
-import nath.settings as settings
-from datetime import datetime
-import xlsxwriter
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 from django.db.models import Q
 from gestao.models import (
     Laboratorio,
@@ -22,6 +18,10 @@ from gestao.forms import (
 )
 from django.contrib import messages
 from django.http import HttpResponse
+
+import io
+import xlsxwriter
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -99,6 +99,66 @@ def laboratorio_delete(request, pk):
         return redirect('laboratorio_list')
     return redirect('laboratorio_update', pk)
 
+@login_required
+def laboratorio_sheet(request, pk):
+    
+    if request.method == "GET":
+        # Cria um buffer na memória para armazenar o arquivo temporariamente
+        output = io.BytesIO()
+
+        # Cria o workbook e uma planilha
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        # cell_format = workbook.add_format()
+        # cell_format.set_text_wrap()
+        # cell_format.set_align("top")
+        # cell_format.set_align("left")
+
+        worksheet = workbook.add_worksheet()
+
+        worksheet.write("A1", "Tipo da Amostra")
+        worksheet.write("B1", "Data da Coleta")
+        worksheet.write("C1", "Meio de Acondicionamento")
+        worksheet.write("D1", "Condição de Armazenamento")
+        worksheet.write("E1", "Especie")
+        worksheet.write("F1", "Sexo Animal")
+        worksheet.write("G1", "Identificacao Interna(IDI)")
+        worksheet.write("H1", "Local da Amostra")
+        
+        laboratorio = Laboratorio.objects.get(id=pk)
+        
+        rowIndex = 2
+        for amostra in Amostra.objects.filter(projeto_pk__laboratorio_pk=laboratorio):
+
+            worksheet.write("A" + str(rowIndex), amostra.get_tipo_amostra_display())
+            date_format = workbook.add_format({'num_format': 'dd/mm/yy'})
+            worksheet.write("C" + str(rowIndex), amostra.data_coleta, date_format)
+            worksheet.write("B" + str(rowIndex), amostra.get_meio_acondicionamento_display())
+            worksheet.write("D" + str(rowIndex), amostra.get_condicao_armazenamento_display())
+            worksheet.write("E" + str(rowIndex), amostra.especie.nome)
+            worksheet.write("F" + str(rowIndex), amostra.sexo)
+            worksheet.write("G" + str(rowIndex), amostra.identificacao_interna_animal)
+            worksheet.write("H" + str(rowIndex), amostra.local_amostra)
+
+            rowIndex += 1
+
+
+        # Fecha o workbook para finalizar o arquivo
+        workbook.close()
+
+        # Reposiciona o ponteiro no início do arquivo
+        output.seek(0)
+
+        # Cria a resposta com o tipo correto de conteúdo
+        response = HttpResponse(
+            output.read(),
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+
+        # Define o nome do arquivo para download
+        response['Content-Disposition'] = 'attachment; filename="planilha-amostras-laboratorio-'+ datetime.now().strftime("%d-%m-%Y")+'.xlsx"'
+
+        return response
 
 # Projeto
 @login_required
@@ -172,6 +232,68 @@ def projeto_delete(request, pk):
     if obj.custom_delete(request):
         return redirect('projeto_list')
     return redirect('projeto_update', pk)
+
+@login_required
+def projeto_sheet(request, pk):
+    
+    if request.method == "GET":
+        # Cria um buffer na memória para armazenar o arquivo temporariamente
+        output = io.BytesIO()
+
+        # Cria o workbook e uma planilha
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        # cell_format = workbook.add_format()
+        # cell_format.set_text_wrap()
+        # cell_format.set_align("top")
+        # cell_format.set_align("left")
+
+        worksheet = workbook.add_worksheet()
+
+        worksheet.write("A1", "Tipo da Amostra")
+        worksheet.write("B1", "Data da Coleta")
+        worksheet.write("C1", "Meio de Acondicionamento")
+        worksheet.write("D1", "Condição de Armazenamento")
+        worksheet.write("E1", "Especie")
+        worksheet.write("F1", "Sexo Animal")
+        worksheet.write("G1", "Identificacao Interna(IDI)")
+        worksheet.write("H1", "Local da Amostra")
+        
+        projeto = Projeto.objects.get(id=pk)
+        
+        rowIndex = 2
+        for amostra in Amostra.objects.filter(projeto_pk=projeto):
+
+            worksheet.write("A" + str(rowIndex), amostra.get_tipo_amostra_display())
+            date_format = workbook.add_format({'num_format': 'dd/mm/yy'})
+            worksheet.write("C" + str(rowIndex), amostra.data_coleta, date_format)
+            worksheet.write("B" + str(rowIndex), amostra.get_meio_acondicionamento_display())
+            worksheet.write("D" + str(rowIndex), amostra.get_condicao_armazenamento_display())
+            worksheet.write("E" + str(rowIndex), amostra.especie.nome)
+            worksheet.write("F" + str(rowIndex), amostra.sexo)
+            worksheet.write("G" + str(rowIndex), amostra.identificacao_interna_animal)
+            worksheet.write("H" + str(rowIndex), amostra.local_amostra)
+
+            rowIndex += 1
+
+
+        # Fecha o workbook para finalizar o arquivo
+        workbook.close()
+
+        # Reposiciona o ponteiro no início do arquivo
+        output.seek(0)
+
+        # Cria a resposta com o tipo correto de conteúdo
+        response = HttpResponse(
+            output.read(),
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+
+        # Define o nome do arquivo para download
+        response['Content-Disposition'] = 'attachment; filename="planilha-amostras-projeto-'+ datetime.now().strftime("%d-%m-%Y")+'.xlsx"'
+
+        return response
+
 
 
 # Especie
@@ -351,6 +473,76 @@ def amostra_update(request, pk):
 
 
 @login_required
+def amostra_delete(request, pk):
+    obj = get_object_or_404(Amostra, id=pk)
+    if obj.custom_delete(request):
+        return redirect('amostra_list')
+    return redirect('amostra_update', pk)
+
+
+@login_required
+def minhas_amostras_sheet(request):
+    
+    if request.method == "GET":
+        # Cria um buffer na memória para armazenar o arquivo temporariamente
+        output = io.BytesIO()
+
+        # Cria o workbook e uma planilha
+        workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+
+        # cell_format = workbook.add_format()
+        # cell_format.set_text_wrap()
+        # cell_format.set_align("top")
+        # cell_format.set_align("left")
+
+        worksheet = workbook.add_worksheet()
+
+        worksheet.write("A1", "Tipo da Amostra")
+        worksheet.write("B1", "Data da Coleta")
+        worksheet.write("C1", "Meio de Acondicionamento")
+        worksheet.write("D1", "Condição de Armazenamento")
+        worksheet.write("E1", "Especie")
+        worksheet.write("F1", "Sexo Animal")
+        worksheet.write("G1", "Identificacao Interna(IDI)")
+        worksheet.write("H1", "Local da Amostra")
+        
+        rowIndex = 2
+        for amostra in Amostra.objects.filter(created_by__usuario_Amostra=request.user.id):
+
+            worksheet.write("A" + str(rowIndex), amostra.get_tipo_amostra_display())
+            date_format = workbook.add_format({'num_format': 'dd/mm/yy'})
+            worksheet.write("C" + str(rowIndex), amostra.data_coleta, date_format)
+            worksheet.write("B" + str(rowIndex), amostra.get_meio_acondicionamento_display())
+            worksheet.write("D" + str(rowIndex), amostra.get_condicao_armazenamento_display())
+            worksheet.write("E" + str(rowIndex), amostra.especie.nome)
+            worksheet.write("F" + str(rowIndex), amostra.sexo)
+            worksheet.write("G" + str(rowIndex), amostra.identificacao_interna_animal)
+            worksheet.write("H" + str(rowIndex), amostra.local_amostra)
+
+            rowIndex += 1
+
+
+        # Fecha o workbook para finalizar o arquivo
+        workbook.close()
+
+        # Reposiciona o ponteiro no início do arquivo
+        output.seek(0)
+
+        # Cria a resposta com o tipo correto de conteúdo
+        response = HttpResponse(
+            output.read(),
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+
+        # Define o nome do arquivo para download
+        response['Content-Disposition'] = 'attachment; filename="planilha-minhas-amostras-'+ datetime.now().strftime("%d-%m-%Y")+'.xlsx"'
+
+        return response
+
+
+
+
+@login_required
 def amostra_share_toogle(request, pk):
 
     obj = get_object_or_404(Amostra, id=pk)
@@ -492,180 +684,7 @@ def minhas_solicitacoes_list(request):
             usuario_solicitante_pk=request.user.id
         ),
     }
+
     return render(
         request, "gestao/minhas_solicitacoes_list.html", {**pre_context, **context}
     )
-
-
-def auth_with_code(request):
-    client_instance = msal.ConfidentialClientApplication(
-        client_id=os.getenv("USER_ID"),
-        client_credential=os.getenv("CLIENT_SECRET"),
-        authority=settings.AUTHORITY_URL,
-    )
-
-    authorization_request_url = client_instance.get_authorization_request_url(
-        settings.SCOPES
-    )
-
-    webbrowser.open(authorization_request_url, new=True)
-
-    authorization_code = "M.C554_SN1.2.U.c0bd6bdd-430f-6957-6ba0-6ba0f9e07eb4"
-
-    access_token = client_instance.acquire_token_by_authorization_code(
-        code=authorization_code,
-        scopes=settings.SCOPES,
-    )
-
-    access_token_id = access_token["access_token"]
-    headers = {"Authorization": "Bearer " + access_token_id}
-
-    response = requests.get(settings.GRAPH_API_ENDPOINT, headers=headers)
-
-    return redirect("home")
-
-
-def login_to_get_acess_token(request):
-
-    app = msal.PublicClientApplication(
-        client_id=os.getenv("APPLICATION_ID"),
-        authority=settings.AUTHORITY_URL,
-    )
-
-    accounts = app.get_accounts()
-    if accounts:
-        app.acquire_token_silent(scopes=settings.SCOPES, account=accounts[0])
-    flow = app.initiate_device_flow(scopes=settings.SCOPES)
-    app_code = flow["message"]
-    webbrowser.open(flow["verification_uri"])
-    result = app.acquire_token_by_device_flow(flow)
-
-    access_token_id = result["access_token"]
-    headers = {"Authorization": "Bearer " + access_token_id}
-
-    response = requests.get(settings.GRAPH_API_ENDPOINT, headers=headers)
-
-    print(response.json())
-
-    return redirect("home")
-
-
-def generate_access_token(app_id, scopes):
-    # Save Session Token as a token file
-    access_token_cache = msal.SerializableTokenCache()
-
-    # read the token file
-    if os.path.exists("ms_graph_api_token.json"):
-        access_token_cache.deserialize(open("ms_graph_api_token.json", "r").read())
-        token_detail = json.load(
-            open(
-                "ms_graph_api_token.json",
-            )
-        )
-
-        token_detail_key = list(token_detail["access_token"].keys())[0]
-        token_expiration = datetime.fromtimestamp(
-            int(token_detail["AccessToken"][token_detail_key]["expires_on"])
-        )
-        if datetime.now() > token_expiration:
-            os.remove("ms_graph_api_token.json")
-            access_token_cache = msal.SerializableTokenCache()
-
-    # assign a SerializableTokenCache object to the client instance
-    client = msal.PublicClientApplication(
-        client_id=app_id, token_cache=access_token_cache
-    )
-
-    accounts = client.get_accounts()
-    if accounts:
-        # load the session
-        token_response = client.acquire_token_silent(scopes, accounts[0])
-    else:
-        # authetnicate your accoutn as usual
-        flow = client.initiate_device_flow(scopes=scopes)
-        print("user_code: " + flow["user_code"])
-        webbrowser.open("https://microsoft.com/devicelogin")
-        token_response = client.acquire_token_by_device_flow(flow)
-
-    with open("ms_graph_api_token.json", "w") as _f:
-        _f.write(access_token_cache.serialize())
-
-    return token_response
-
-
-def upload_to_onedrive(request):
-    access_token = generate_access_token(
-        app_id=os.getenv("APPLICATION_ID"),
-        scopes=settings.SCOPES,
-    )
-
-    headers = {
-        "Authorization": "Bearer " + access_token["access_token"],
-    }
-
-    file_path = "nath_project\nath\nath\artifacts\exemplo1.one"
-    file_name = os.path.basename(file_path)
-
-    with open(file_path, "rb") as upload:
-        media_content = upload.read()
-
-    response = request.put(
-        settings.GRAPH_API_ENDPOINT
-        + f"drive/itens/root:/Amostras/{file_name}:/content",
-        headers=headers,
-        data=media_content,
-    )
-
-    print(response.json())
-
-
-def download_from_onedrive(request):
-    pass
-
-
-def graph_gab_callback(request):
-    code = "Não recebido."
-    if request.method == "GET":
-        code = request.GET.get("code")
-    return HttpResponse("Codigo: " + code)
-
-
-def excel(request):
-    if request.method == "GET":
-
-        rowIndex = 2
-        artifact_path = "nath/artifacts/Amostras.xlsx"
-
-        workbook = xlsxwriter.Workbook(artifact_path)
-        cell_format = workbook.add_format()
-        cell_format.set_text_wrap()
-        cell_format.set_align("top")
-        cell_format.set_align("left")
-        
-
-        worksheet = workbook.add_worksheet()
-
-        worksheet.write("A1", "Tipo da Amostra")
-        worksheet.write("B1", "Data da Coleta")
-        worksheet.write("C1", "Meio de Acondicionamento")
-        worksheet.write("D1", "Condição de Armazenamento")
-        worksheet.write("E1", "Especie")
-        worksheet.write("F1", "Sexo Animal")
-        worksheet.write("G1", "Identificacao Interna(IDI)")
-        worksheet.write("H1", "Local da Amostra")
-
-        for amostra in Amostra.objects.all():
-
-            worksheet.write("A" + str(rowIndex), amostra.data_coleta)
-            worksheet.write("C" + str(rowIndex), amostra.data_coleta)
-            worksheet.write("B" + str(rowIndex), amostra.data_coleta)
-            worksheet.write("D" + str(rowIndex), amostra.data_coleta)
-            worksheet.write("E" + str(rowIndex), amostra.data_coleta)
-            worksheet.write("F" + str(rowIndex), amostra.data_coleta)
-            worksheet.write("G" + str(rowIndex), amostra.data_coleta)
-            worksheet.write("H" + str(rowIndex), amostra.data_coleta)
-
-            rowIndex += 1
-
-        workbook.close()
-    return HttpResponse()

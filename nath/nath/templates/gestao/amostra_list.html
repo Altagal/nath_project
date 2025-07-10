@@ -19,6 +19,10 @@
           <div class="card-head-row">
             <div class="card-title">{{ card_title }}</div>
             <div class="card-tools">
+              <button type="button" class="btn btn-lg btn-success" id="minhas_amostras_sheet_button">
+                                    <i class="fas fa-save"></i>
+                     <div>Baixar Planilha</div>
+              </button>
               <a href="{% url 'amostra_create' %}" class="btn btn-lg btn-primary">
                 <i class="fas fa-edit"></i>
                 <div>Cadastrar</div>
@@ -58,4 +62,13 @@
 {% endblock %}
 {% block javascript %}
   <script src="{% static 'assets/js/primato/primato_script.js' %}"></script>
-{% endblock %}
+  
+  <script>
+    $('#minhas_amostras_sheet_button').click(function(e) {
+      console.log("Baixar planilha de amostras");
+        window.location.href = "{% url 'minhas_amostras_sheet' %}"
+	    }
+	  );
+  </script>
+
+  {% endblock %}

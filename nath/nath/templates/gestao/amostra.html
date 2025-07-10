@@ -44,6 +44,16 @@
                   </div>
                 </div>
               {% endif %}
+              <div class="col-xl-3">
+                {% if form.initial.id and not is_view %}
+                  <div class="form-group">
+                    <button type="button" class="btn btn-danger btn-lg btn-block" id="amostra_delete_button">
+                      <i class="fas fa-trash-alt"></i>
+                      <div>Excluir</div>
+                    </button>
+                  </div>
+                {% endif %}
+              </div>
             </div>
           </form>
         </div>
@@ -111,4 +121,31 @@
 {% endblock %}
 
 {% block javascript %}
+ {% if amostra_obj and not is_view %}
+    <script>
+      $('#amostra_delete_button').click(function (e) {
+        swal({
+          text: 'Tem certeza que deseja excluir?',
+          icon: 'info',
+          buttons: {
+            confirm: {
+              text: 'Sim',
+              className: 'btn btn-success'
+            },
+            cancel: {
+              text: 'Não',
+              visible: true,
+              className: 'btn btn-danger'
+            }
+          }
+        }).then((Delete) => {
+          if (Delete) {
+            window.location.href = "{% url 'amostra_delete' amostra_obj.id %}"
+          } else {
+            swal.close()
+          }
+        })
+      })
+    </script>
+{% endif %}
 {% endblock %}

@@ -92,6 +92,11 @@ class Amostra(CustomBaseModel):
     
     is_compartilhavel = models.BooleanField(default=False)
     
+    @property
+    def sexo(self):
+        if self.sexo_animal:
+            return self.get_sexo_animal_display()
+        return 'Não informado'
     
 class SolicitacaoAmostra(CustomBaseModel):
     amostra_pk = models.ForeignKey('Amostra', on_delete=models.CASCADE, related_name='solicitacoes')
